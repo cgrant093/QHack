@@ -14,24 +14,25 @@ def compare_circuits(angles):
     Returns:
         - (float): | < \sigma^x >_1 - < \sigma^x >_2 |
     """
-    
-    return abs(q_func_1(angles) - q_func_2(angles))
 
     # QHACK #
     
-dev1 = qml.device("default.qubit", wires=1)
-  
-@qml.qnode(dev1)  
-def q_func_1(angles):
-    qml.RX(angles[0], wires=0)
-    qml.RY(angles[1], wires=0)
-    return qml.expval(qml.PauliX(0))
+    dev1 = qml.device("default.qubit", wires=1)
+      
+    @qml.qnode(dev1)  
+    def q_func_1(angles):
+        qml.RX(angles[0], wires=0)
+        qml.RY(angles[1], wires=0)
+        return qml.expval(qml.PauliX(0))
 
-@qml.qnode(dev1)   
-def q_func_2(angles):
-    qml.RY(angles[1], wires=0)
-    qml.RX(angles[0], wires=0)
-    return qml.expval(qml.PauliX(0))
+    @qml.qnode(dev1)   
+    def q_func_2(angles):
+        qml.RY(angles[1], wires=0)
+        qml.RX(angles[0], wires=0)
+        return qml.expval(qml.PauliX(0))
+    
+        
+    return abs(q_func_1(angles) - q_func_2(angles))
 
     # QHACK #
 
