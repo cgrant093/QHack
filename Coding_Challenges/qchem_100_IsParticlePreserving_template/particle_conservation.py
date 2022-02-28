@@ -19,6 +19,8 @@ def binary_list(m, n):
     arr = []
     # QHACK #
     
+    arr = np.asarray(list(np.binary_repr(m, width=n))).astype(int)
+    
     # QHACK #
     return arr
 
@@ -37,9 +39,16 @@ def basis_states(n):
     arr = []
 
     # QHACK #
+    
+    new_arr = np.empty([2**n, n])
+    
+    for i in range(2**n):
+        new_arr[i] = binary_list(i, n)
+
+    arr = new_arr
 
     # QHACK #
-
+    
     return arr
 
 
@@ -56,7 +65,32 @@ def is_particle_preserving(circuit, n):
     """
 
     # QHACK #
+    
+    # create all basis states in array form in an array
+    all_basis_states = basis_states(n)
+    # create a "boole" that'll state if particles are preserved
+        # 1 means True, all particle states were preserved
+        # 0 means False, not all states were preserved
+    are_particles_preserved = True
+    
+    for i in range(len(all_basis_states)):
+        # check if a state was already not preserved
+        #if are_particles_preserved == False:
+            #return False
+        
+        # create output state for specific basis state
+        output = np.nonzero(circuit(all_basis_states[i]))[0]
+        
+        # compare all outputs to the single input state
+            # for not preserved, set boole to False
+        for j in range(len(output)):
+            binary_output = np.asarray(list(np.binary_repr(output[j], width=n))).astype(int)
 
+            if np.count_nonzero(binary_output) != np.count_nonzero(all_basis_states[i]):
+                are_particles_preserved = False
+
+    return are_particles_preserved
+    
     # QHACK #
 
 
